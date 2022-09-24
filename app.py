@@ -101,7 +101,11 @@ error404 = {
 
 
 #determine probabilities in a list
-probEarthquake, probFlood, probHurricane, probWildfire, total = 0.0
+probEarthquake = 0.0
+probFlood = 0.0
+probHurricane = 0.0
+probWildfire = 0.0
+total = 0.0
 probList = []
 
 def probability(currentLocation):
