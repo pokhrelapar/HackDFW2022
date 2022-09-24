@@ -2,18 +2,18 @@ import json
 from flask import Flask, request
 import numpy as np
 
-#open json object
-file = open("[name].json")
-data = json.load(file)
+#routing API endpoints
+app = Flask(__name__)
 
 #list of locations
 locations = [
-    "[name1]", "[name2]", "[name3]", "[name4]"
+    "Dallas", "San Francisco", "Patterson", "Wichita"
 ]
 
-#gather current location and insurance plan from the json object
-currentLocation = data["Location"]
-currPlan = data["Insurance"]
+#list of plans
+plans = [
+
+]
 
 #Dictionaries to send back to front-end
 introAndAbout = {
@@ -43,7 +43,7 @@ notCoveredEarthquake = {
 }
 
 insuranceWildfire = {
-    'Cost': 2500,
+    'Cost': [insert num here],
     'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
                    "some parts of the roof and the exterior of your house has some burn marks. However, since you chose to protect "
                    "your home with wilfire insurance, your insurance will help pay [insert amount here] in repair costs, "
@@ -52,7 +52,7 @@ insuranceWildfire = {
 }
 
 notCoveredWildfire = {
-    'Cost': 3000,
+    'Cost': [insert num here],
     'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
                    "some parts of the roof and the exterior of your house has some burn marks. Unfortunately, since you did "
                    "not end up choosing to cover your house with wildfire insurance, you have to end up paying for all the "
@@ -60,7 +60,7 @@ notCoveredWildfire = {
 }
 
 insuranceHurricane = {
-    'Cost': 6000,
+    'Cost': [insert num here],
     'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
                    "Your house suffered major roof damage as a result. Thankfully, since you opted into hurricane insurance to cover, "
                    "your insurance will cover [insert num here], so you will in turn only have to pay [insert num here] out of pocket. "
@@ -68,51 +68,62 @@ insuranceHurricane = {
 }
 
 notCoveredHurricane = {
-    'Cost': 7000,
-    'Description': "Hello world"
+    'Cost': [insert num here],
+    'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
+                   "Your house suffered major roof damage as a result. However, since you did not opt to cover in your insurance for "
+                   "hurricane damage, you have to pay all the damages out of pocket, which totals [insert num here]."
 }
 
 insuranceFlood = {
-    'Cost': 8000,
-    'Description': "This happened blah blah blah"
+    'Cost': [insert num here],
+    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
+                   "as a result. Fortunately, you chose to include flood coverage in your insurance plan, which will help cover "
+                   "[insert num here], totaling only [insert num here] to be paid out of pocket. The total cost of damages was "
+                   "[insert num here]."
 }
 
 notCoveredFlood = {
-    'Cost': 1500,
-    'Description': "This happened blah blah blah"
+    'Cost': [insert num here],
+    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
+                   "as a result. Sadly, you did not opt in your plan for flooding insurance, causing you to have to pay for all "
+                   "damages out of pocket, which totals [insert num here]."
 }
 
 safe = {
     'Cost': 0,
-    'Description': "You are safe for this time mwhahahahhahhahahahhaahah!"
+    'Description': "You are safe...for now...!"
+}
+
+error404 = {
+    '404': "Error 404, page not found."
 }
 
 #determine probabilities in a list
 probEarthquake, probFlood, probHurricane, probWildfire, total = 0.0
 probList = []
 
-def probability():
+def probability(currentLocation):
 
     if currentLocation in locations:
-        if currentLocation == "[name1]":
+        if currentLocation == "Dallas":
             probEarthquake = 0.25
             probFlood = 0.05
             probHurricane = 0.02
             probWildfire = 0.15
             total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
-        elif currentLocation == "[name2]":
+        elif currentLocation == "San Francisco":
             probEarthquake = 0.05
             probFlood = 0.25
             probHurricane = 0.10
             probWildfire = 0.02
             total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
-        elif currentLocation == "[name3]":
+        elif currentLocation == "Patterson":
             probEarthquake = 0.05
             probFlood = 0.15
             probHurricane = 0.25
             probWildfire = 0.02
             total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
-        elif currentLocation == "[name4]":
+        elif currentLocation == "Wichita":
             probEarthquake = 0.15
             probFlood = 0.02
             probHurricane = 0.05
@@ -131,20 +142,23 @@ def probability():
     return probList
 
 
-#routing API endpoints
-app = Flask(__name__)
-
 @app.route("/explain", methods=['GET'])
 def explain():
     if request.method == 'GET':
         return json.dumps(introAndAbout)
     else:
-        return #error 404
+        return json.dumps(error404)
 
-@app.route("/results", methods=['GET'])
-def results():
+@app.route("/plans", methods=['GET'])
+def plans():
+    return #insert json.dumps, check for error404
+
+@app.route("/results/<location>/<plan>", methods=['GET'])
+def results(location, plan):
+    currPlan = plan
+    currLocation = location
     if request.method == 'GET':
-        numChose = np.random.choice(np.arrange(1, 6), p=probability())
+        numChose = np.random.choice(np.arrange(1, 6), p=probability(currLocation))
         if numChose == 1:
             return json.dumps(safe)
         if numChose == 2:
@@ -168,7 +182,12 @@ def results():
             else:
                 return json.dumps(notCoveredWildfire)
     else:
-        return #error 404
+        return json.dumps(error404)
 
 if __name__ == "__main__":
     app.run()
+
+
+
+
+
