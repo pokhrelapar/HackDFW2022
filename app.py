@@ -25,16 +25,16 @@ introAndAbout = {
 }
 
 insuranceEarthquake = {
-    'Cost': 5500,
-    'Description': "There was a devastating earthquake in your area and it caused the hanging items in your house, "
-                   "damaging the walls and the floors of your house.",
-    'Result'     : "Luckily, you decided to get the earthquake coverage in addition to your plan, and that turned out "
-                   "to be a good idea, since now your insurance will cover $3,000 in repair costs. The amount of money that "
-                   "you needed to repair the damages in the house was $8,500, so you ended up paying $5,500 out of pocket. Good job!"
+    'Cost': 42900,
+    'Description': "There was a devastating 8.4 magnitude earthquake near San Francisco! Your house sustained"
+                   "$92,500 in structural damage and you will need to file a claim!",
+    'Result'     : "Luckily, you included earthquake coverage with your State Farm homeowner's insurance and they're"
+                   "here to help! You will only pay up to your deductible amount of $42,900, and State Farm will cover"
+                   "the remaining amount!"
 }
 
 notCoveredEarthquake = {
-    'Cost': 8500,
+    'Cost': 92500,
     'Description': "There was a devastating earthquake in your area and it caused the hanging items in your house, "
                    "damaging the walls and the floors of your house.",
     'Result'     : "Sadly, you decided to not get the earthquake coverage in addition to your plan, and that turned out "
@@ -42,8 +42,8 @@ notCoveredEarthquake = {
                    "house was $8,500, which you have to pay out of pocket. "
 }
 
-insuranceWildfire = {
-    'Cost': [insert num here],
+insuranceLandslide = {
+    'Cost': 12000,
     'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
                    "some parts of the roof and the exterior of your house has some burn marks. However, since you chose to protect "
                    "your home with wilfire insurance, your insurance will help pay [insert amount here] in repair costs, "
@@ -51,31 +51,31 @@ insuranceWildfire = {
                    "[insert num here]."
 }
 
-notCoveredWildfire = {
-    'Cost': [insert num here],
+notCoveredLandslide = {
+    'Cost': 12000,
     'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
                    "some parts of the roof and the exterior of your house has some burn marks. Unfortunately, since you did "
                    "not end up choosing to cover your house with wildfire insurance, you have to end up paying for all the "
                    "damages out of pocket. The total cost of the damages ended up being [insert num here]."
 }
 
-insuranceHurricane = {
-    'Cost': [insert num here],
+insuranceWindstorm = {
+    'Cost': 6000,
     'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
                    "Your house suffered major roof damage as a result. Thankfully, since you opted into hurricane insurance to cover, "
                    "your insurance will cover [insert num here], so you will in turn only have to pay [insert num here] out of pocket. "
                    "The total cost for repairs was [insert num here]."
 }
 
-notCoveredHurricane = {
-    'Cost': [insert num here],
+notCoveredWindstorm = {
+    'Cost': 6000,
     'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
                    "Your house suffered major roof damage as a result. However, since you did not opt to cover in your insurance for "
                    "hurricane damage, you have to pay all the damages out of pocket, which totals [insert num here]."
 }
 
 insuranceFlood = {
-    'Cost': [insert num here],
+    'Cost': 2500,
     'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
                    "as a result. Fortunately, you chose to include flood coverage in your insurance plan, which will help cover "
                    "[insert num here], totaling only [insert num here] to be paid out of pocket. The total cost of damages was "
@@ -83,7 +83,7 @@ insuranceFlood = {
 }
 
 notCoveredFlood = {
-    'Cost': [insert num here],
+    'Cost': 25000,
     'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
                    "as a result. Sadly, you did not opt in your plan for flooding insurance, causing you to have to pay for all "
                    "damages out of pocket, which totals [insert num here]."
@@ -97,6 +97,8 @@ safe = {
 error404 = {
     '404': "Error 404, page not found."
 }
+
+
 
 #determine probabilities in a list
 probEarthquake, probFlood, probHurricane, probWildfire, total = 0.0
@@ -172,15 +174,15 @@ def results(location, plan):
             else:
                 return json.dumps(notCoveredFlood)
         if numChose == 4:
-            if "Hurricane" in currPlan:
-                return json.dumps(insuranceHurricane)
+            if "Windstorm" in currPlan:
+                return json.dumps(insuranceWindstorm)
             else:
-                return json.dumps(notCoveredHurricane)
+                return json.dumps(notCoveredWindstorm)
         if numChose == 5:
-            if "Wildfire" in currPlan:
-                return json.dumps(insuranceWildfire)
+            if "Landslide" in currPlan:
+                return json.dumps(insuranceLandslide)
             else:
-                return json.dumps(notCoveredWildfire)
+                return json.dumps(notCoveredLandslide)
     else:
         return json.dumps(error404)
 
