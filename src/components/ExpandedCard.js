@@ -6,7 +6,8 @@ class ExpandedCard extends React.Component {
 			<div class="card text-center vw-25 h-50 box-shadow text-bg-dark" id={this.props.id}>
 				<div class="card-body">
 					<h1 class="card-title text-light">{this.props.header}</h1>
-					<p class="card-text">{this.props.desc}</p>
+					<h1 class="card-text">{this.props.desc}<br></br></h1>
+					<p class="card-text">{this.props.result}</p>
 				</div>
 			</div>
 		</div>
