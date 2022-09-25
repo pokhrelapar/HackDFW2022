@@ -11,9 +11,37 @@ locations = [
 ]
 
 #list of plans
-plans = [
+plansDallas = [
+    
+]
+
+plansSanFrancisco = [
 
 ]
+
+plansPatterson = [
+
+]
+
+plansWichita = [
+
+]
+
+#Dictionaries to send back to front-end
+introAndAbout = {
+    'Introduction': "Hi, welcome to [insert name here]. The goal of this game is to create an insurance plan and avoid the obstacles throughout the game. There" 
+              " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
+              "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
+              "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
+              "Good luck!"
+}
+
+locationDescription = {
+    'Dallas': "",
+    'San Francisco': "",
+    'Patterson': "",
+    'Wichita': ""
+}
 
 #Dictionaries to send back to front-end
 introAndAbout = {
@@ -98,14 +126,13 @@ error404 = {
     '404': "Error 404, page not found."
 }
 
-
-
 #determine probabilities in a list
 probEarthquake = 0.0
 probFlood = 0.0
-probHurricane = 0.0
-probWildfire = 0.0
+probWindstorm = 0.0
+probLandslide = 0.0
 total = 0.0
+
 probList = []
 
 def probability(currentLocation):
@@ -114,27 +141,27 @@ def probability(currentLocation):
         if currentLocation == "Dallas":
             probEarthquake = 0.25
             probFlood = 0.05
-            probHurricane = 0.02
-            probWildfire = 0.15
-            total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
+            probWindstorm = 0.02
+            probLandslide = 0.15
+            total = 1.0 - (probWindstorm + probLandslide + probFlood + probEarthquake)
         elif currentLocation == "San Francisco":
             probEarthquake = 0.05
             probFlood = 0.25
-            probHurricane = 0.10
-            probWildfire = 0.02
-            total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
+            probWindstorm = 0.10
+            probLandslide = 0.02
+            total = 1.0 - (probWindstorm + probLandslide + probFlood + probEarthquake)
         elif currentLocation == "Patterson":
             probEarthquake = 0.05
             probFlood = 0.15
-            probHurricane = 0.25
-            probWildfire = 0.02
-            total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
+            probWindstorm = 0.25
+            probLandslide = 0.02
+            total = 1.0 - (probWindstorm + probLandslide + probFlood + probEarthquake)
         elif currentLocation == "Wichita":
             probEarthquake = 0.15
             probFlood = 0.02
-            probHurricane = 0.05
-            probWildfire = 0.25
-            total = 1.0 - (probWildfire + probHurricane + probFlood + probEarthquake)
+            probWindstorm = 0.05
+            probLandslide = 0.25
+            total = 1.0 - (probWindstorm + probLandslide + probFlood + probEarthquake)
     else:
         print("Invalid Location")
 
@@ -143,8 +170,8 @@ def probability(currentLocation):
     probList.append(total)
     probList.append(probEarthquake)
     probList.append(probFlood)
-    probList.append(probHurricane)
-    probList.append(probWildfire)
+    probList.append(probWindstorm)
+    probList.append(probLandslide)
     return probList
 
 
@@ -152,6 +179,20 @@ def probability(currentLocation):
 def explain():
     if request.method == 'GET':
         return json.dumps(introAndAbout)
+    else:
+        return json.dumps(error404)
+
+@app.route("/locations", methods=['GET'])
+def locationsList():
+    if request.method == 'GET':
+        return json.dumps(locations)
+    else:
+        return json.dumps(error404)
+
+@app.route("/locDescription", methods=['GET'])
+def locDescription():
+    if request.method == 'GET':
+        return json.dumps(locationDescription)
     else:
         return json.dumps(error404)
 
@@ -181,17 +222,23 @@ def results(location, plan):
             if "Windstorm" in currPlan:
                 return json.dumps(insuranceWindstorm)
             else:
-                return json.dumps(notCoveredWindstorm)
+                return json.dumps(insuranceWindstorm)
         if numChose == 5:
             if "Landslide" in currPlan:
                 return json.dumps(insuranceLandslide)
             else:
-                return json.dumps(notCoveredLandslide)
+                return json.dumps(insuranceLandslide)
     else:
         return json.dumps(error404)
 
 if __name__ == "__main__":
     app.run()
+
+
+
+
+
+
 
 
 
