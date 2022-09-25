@@ -2,16 +2,112 @@ import json
 from flask import Flask, request
 import numpy as np
 
-#creating the app endpoint
+#routing API endpoints
 app = Flask(__name__)
+
+#list of locations
+locations = [
+    "Dallas", "San Francisco", "Patterson", "Wichita"
+]
+
 
 #Dictionaries to send back to front-end
 introAndAbout = {
     'Introduction': "Hi, welcome to [insert name here]. The goal of this game is to create an insurance plan and avoid the obstacles throughout the game. There" 
-                    " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
-                    "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
-                    "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
-                "Good luck!"
+              " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
+              "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
+              "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
+              "Good luck!"
+}
+
+locationDescription = {
+    'Dallas': "",
+    'San Francisco': "",
+    'Patterson': "",
+    'Wichita': ""
+}
+
+#Dictionaries to send back to front-end
+introAndAbout = {
+    'Introduction': "Hi, welcome to [insert name here]. The goal of this game is to create an insurance plan and avoid the obstacles throughout the game. There" 
+              " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
+              "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
+              "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
+              "Good luck!"
+}
+
+insuranceEarthquake = {
+    'Cost': 42900,
+    'Description': "There was a devastating 8.4 magnitude earthquake near San Francisco! Your house sustained"
+                   "$92,500 in structural damage and you will need to file a claim!",
+    'Result'     : "Luckily, you included earthquake coverage with your State Farm homeowner's insurance and they're"
+                   "here to help! You will only pay up to your deductible amount of $42,900, and State Farm will cover"
+                   "the remaining amount!"
+}
+
+notCoveredEarthquake = {
+    'Cost': 92500,
+    'Description': "There was a devastating earthquake in your area and it caused the hanging items in your house, "
+                   "damaging the walls and the floors of your house.",
+    'Result'     : "Sadly, you decided to not get the earthquake coverage in addition to your plan, and that turned out "
+                   "to be a risky bet which backfired. The amount of money that you need to repair the damages in the "
+                   "house was $8,500, which you have to pay out of pocket. "
+}
+
+insuranceLandslide = {
+    'Cost': 12000,
+    'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
+                   "some parts of the roof and the exterior of your house has some burn marks. However, since you chose to protect "
+                   "your home with wilfire insurance, your insurance will help pay [insert amount here] in repair costs, "
+                   "leaving you with [insert num here] to pay out of pocket. The intended amount to fully repair the damages was "
+                   "[insert num here]."
+}
+
+notCoveredLandslide = {
+    'Cost': 12000,
+    'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
+                   "some parts of the roof and the exterior of your house has some burn marks. Unfortunately, since you did "
+                   "not end up choosing to cover your house with wildfire insurance, you have to end up paying for all the "
+                   "damages out of pocket. The total cost of the damages ended up being [insert num here]."
+}
+
+insuranceWindstorm = {
+    'Cost': 6000,
+    'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
+                   "Your house suffered major roof damage as a result. Thankfully, since you opted into hurricane insurance to cover, "
+                   "your insurance will cover [insert num here], so you will in turn only have to pay [insert num here] out of pocket. "
+                   "The total cost for repairs was [insert num here]."
+}
+
+notCoveredWindstorm = {
+    'Cost': 6000,
+    'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
+                   "Your house suffered major roof damage as a result. However, since you did not opt to cover in your insurance for "
+                   "hurricane damage, you have to pay all the damages out of pocket, which totals [insert num here]."
+}
+
+insuranceFlood = {
+    'Cost': 2500,
+    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
+                   "as a result. Fortunately, you chose to include flood coverage in your insurance plan, which will help cover "
+                   "[insert num here], totaling only [insert num here] to be paid out of pocket. The total cost of damages was "
+                   "[insert num here]."
+}
+
+notCoveredFlood = {
+    'Cost': 25000,
+    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
+                   "as a result. Sadly, you did not opt in your plan for flooding insurance, causing you to have to pay for all "
+                   "damages out of pocket, which totals [insert num here]."
+}
+
+safe = {
+    'Cost': 0,
+    'Description': "You are safe...for now...!"
+}
+
+error404 = {
+    '404': "Error 404, page not found."
 }
 
 essentialPremiumsDallas = {
@@ -98,110 +194,6 @@ premiumPremiumsAndLandslideWichita = {
     'Deductible': 2630
 }
 
-insuranceEarthquake = {
-    'Cost': 42900,
-    'Description': "There was a devastating 8.4 magnitude earthquake near San Francisco! Your house sustained"
-                   "$92,500 in structural damage and you will need to file a claim!",
-    'Result'     : "Luckily, you included earthquake coverage with your State Farm homeowner's insurance and they're"
-                   "here to help! You will only pay up to your deductible amount of $42,900, and State Farm will cover"
-                   "the remaining amount!"
-}
-
-notCoveredEarthquake = {
-    'Cost': 92500,
-    'Description': "There was a devastating earthquake in your area and it caused the hanging items in your house, "
-                   "damaging the walls and the floors of your house.",
-    'Result'     : "Sadly, you decided to not get the earthquake coverage in addition to your plan, and that turned out "
-                   "to be a risky bet which backfired. The amount of money that you need to repair the damages in the "
-                   "house was $8,500, which you have to pay out of pocket. "
-}
-
-insuranceLandslide = {
-    'Cost': 12000,
-    'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
-                   "some parts of the roof and the exterior of your house has some burn marks. However, since you chose to protect "
-                   "your home with wilfire insurance, your insurance will help pay [insert amount here] in repair costs, "
-                   "leaving you with [insert num here] to pay out of pocket. The intended amount to fully repair the damages was "
-                   "[insert num here]."
-}
-
-notCoveredLandslide = {
-    'Cost': 12000,
-    'Description': "There was a wildfire near your area, and the wildfire spread near your house and ended up burning "
-                   "some parts of the roof and the exterior of your house has some burn marks. Unfortunately, since you did "
-                   "not end up choosing to cover your house with wildfire insurance, you have to end up paying for all the "
-                   "damages out of pocket. The total cost of the damages ended up being [insert num here]."
-}
-
-insuranceWindstorm = {
-    'Cost': 6000,
-    'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
-                   "Your house suffered major roof damage as a result. Thankfully, since you opted into hurricane insurance to cover, "
-                   "your insurance will cover [insert num here], so you will in turn only have to pay [insert num here] out of pocket. "
-                   "The total cost for repairs was [insert num here]."
-}
-
-notCoveredWindstorm = {
-    'Cost': 6000,
-    'Description': "Oh no! Weather condiitions were really bad and the perfect conditions were created for the perfect hurricane storm! "
-                   "Your house suffered major roof damage as a result. However, since you did not opt to cover in your insurance for "
-                   "hurricane damage, you have to pay all the damages out of pocket, which totals [insert num here]."
-}
-
-insuranceFlood = {
-    'Cost': 2500,
-    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
-                   "as a result. Fortunately, you chose to include flood coverage in your insurance plan, which will help cover "
-                   "[insert num here], totaling only [insert num here] to be paid out of pocket. The total cost of damages was "
-                   "[insert num here]."
-}
-
-notCoveredFlood = {
-    'Cost': 25000,
-    'Description': "Bad news! It rained so much on one day to cause a major flash flood, and your house suffered internal pipe damages "
-                   "as a result. Sadly, you did not opt in your plan for flooding insurance, causing you to have to pay for all "
-                   "damages out of pocket, which totals [insert num here]."
-}
-
-safe = {
-    'Cost': 0,
-    'Description': "You are safe...for now...!"
-}
-
-error404 = {
-    '404': "Error 404, page not found."
-}
-
-#list of locations
-locations = [
-    {"Dallas": "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley', therefore "
-               "prone to windstorms."}, 
-    {"San Francisco": "One of the most populat tourist cities to visit in California, lots of good food and attractions to see, "
-                      "however near a fault line, therefore prone to earthquakes."},
-    {"Patterson": "A relatively unpopulated city, totaling at only 750 people, but known for being near the heart of Atlanta, "
-                  "lots of tourist attractions, but frequent flooding "
-                  "due to Georgia's proximity to the coast."},
-    {"Wichita": "Known as the 'Air Capital of the World', Wichita is known for being the birthplace of the popular fast food pizza. "
-                "However, Landslides are one of the most common natural disasters that occur in Kansas, being that it's in the heart "
-                "of tornado valley."}
-]
-
-dallasPlans = [
-    essentialPremiumsDallas, essentialPremiumsAndWindstormDallas, premiumPremiumsDallas, premiumPremiumsAndWindstormDallas
-]
-
-sanFranPlans = [
-    essentialPremiumsSanFran, essentialPremiumsAndEarthquakeSanFran, premiumPremiumsSanFran, premiumPremiumsAndEarthquakeSanFran
-]
-
-pattersonPlans = [
-    essentialPremiumsPatterson, essentialPremiumsAndFloodPatterson, premiumPremiumsPatterson, premiumPremiumsAndFloodPatterson
-]
-
-wichitaPlans = [
-    essentialPremiumsWichita, essentialPremiumsAndLandslideWichita, premiumPremiumsWichita, premiumPremiumsAndLandslideWichita
-]
-
 #determine probabilities in a list
 probEarthquake = 0.0
 probFlood = 0.0
@@ -258,12 +250,28 @@ def explain():
     else:
         return json.dumps(error404)
 
+
 @app.route("/locations", methods=['GET'])
-def getLocations():
+def locationsList():
     if request.method == 'GET':
         return json.dumps(locations)
     else:
         return json.dumps(error404)
+
+
+@app.route("/locDescription", methods=['GET'])
+def locDescription():
+    if request.method == 'GET':
+        return json.dumps(locationDescription)
+    else:
+        return json.dumps(error404)
+
+
+dallasPlans = [essentialPremiumsDallas, essentialPremiumsAndWindstormDallas, premiumPremiumsDallas, premiumPremiumsAndWindstormDallas]
+sanFranPlans = [essentialPremiumsSanFran, essentialPremiumsAndEarthquakeSanFran, premiumPremiumsSanFran, premiumPremiumsAndEarthquakeSanFran]
+pattersonPlans = [essentialPremiumsPatterson, essentialPremiumsAndFloodPatterson, premiumPremiumsPatterson, premiumPremiumsAndFloodPatterson]
+wichitaPlans = [essentialPremiumsWichita, essentialPremiumsAndLandslideWichita, premiumPremiumsWichita, premiumPremiumsAndLandslideWichita]
+
 
 @app.route("/plans/<location>", methods=['GET'])
 def plans(location):
@@ -278,6 +286,7 @@ def plans(location):
             return json.dumps(wichitaPlans)
     else:
         return json.dumps(error404)
+
 
 @app.route("/results/<location>/<plan>", methods=['GET'])
 def results(location, plan):
@@ -310,10 +319,6 @@ def results(location, plan):
     else:
         return json.dumps(error404)
 
+
 if __name__ == "__main__":
     app.run()
-
-
-
-
-
