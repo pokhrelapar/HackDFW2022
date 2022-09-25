@@ -1,0 +1,59 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+
+/*
+.grid-child-1 .jake h1{
+    color: white;
+    font-size: 80px;
+    font-weight: 700px;
+    text-align: center;
+    margin-left: 100px;
+    float: left;
+}
+
+*/
+
+.grid-child-1  {
+    color: white;
+    font-size: 40px;
+    font-weight: 700px;
+    text-align: center;
+    margin-left: 100px;
+    float: left;
+}
+
+
+ .grid-child-1 strong {
+    color:#dc3545;
+    font-size: 60px;
+    margin-left: 20px;
+
+}
+
+ .grid-child-1 strong .from {
+    color: white;
+    font-size: 80px;
+    margin-left: 20px;
+
+}
+
+
+ .grid-child-2 .jake-img img{
+    border-radius: 10px;
+    width: 586px;
+    height: 586 px;
+    margin-top: 50px;
+    margin-right: 50px;
+    float: right;
+    transition: 1s ease;
+}
+ .grid-child-2 .jake-img img:hover {
+    -webkit-transform: scale(0.8);
+    -ms-transform: scale(0.8);
+    transform: scale(0.8);
+    transition: 1s ease;
+}

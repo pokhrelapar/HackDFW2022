@@ -4,12 +4,17 @@ import useLocationStore from './store/locationStore';
 import useScenarioStore from './store/scenarioStore';
 import usePlanStore from './store/planStore';
 import { Box, Button, Card, CardActionArea, CardContent, Chip, Container, Grid, Typography } from '@mui/material';
+import Home from './Home';
 
 function App() {
   const locations = useLocationStore(state => state.locations);
-  const scenarios = useScenarioStore(state => state.scenarios);
   const getLocations = useLocationStore(state => state.getLocations);
+  const selectedLocation = useLocationStore(state => state.selectedLocation);
   const plans = usePlanStore(state => state.plans);
+  const getPlans = usePlanStore(state => state.getPlans);
+  const scenarios = useScenarioStore(state => state.scenarios);
+  // const getScenario = useScenarioStore(state => state.getScenario);
+  // const selectedScenarios = useScenarioStore(state => state.selectedScenarios);
   const [selected, setSelected] = useState();
   const [stage, setStage] = useState("splash");
   const [year, setYear] = useState(1);
@@ -29,15 +34,25 @@ function App() {
     }
     else if (stage === "location") {
       setStage("plan");
+      useLocationStore.setState({selectedLocation: selected});
       setSelected(undefined);
+      getPlans(useLocationStore.getState().selectedLocation);
+
     } else if (stage === "plan") {
+      // useScenarioStore.setState({scenario: getScenario(useLocationStore.getState().selectedLocation, usePlanStore.getState().selectedPlan)});
+      // useScenarioStore.setState({selectedScenarios: useScenarioStore.getState().selectedScenarios + selected})
       setStage("outcome");
+      // usePlanStore.setState({selectedPlan: selected});
       setSelected(undefined);
-    } else if (year !== 10) {
+      
+    } else if (year !== 3) {
+      // useScenarioStore.setState({scenario: getScenario(useLocationStore.getState().selectedLocation, usePlanStore.getState().selectedPlan)});
+      // useScenarioStore.setState({selectedScenarios: useScenarioStore.getState().selectedScenarios + selected})
       setStage("outcome");
       setYear(year + 1);
     } else {
       setStage("end");
+      setYear(0);
     }
   }
   const startOver = e => {
@@ -52,7 +67,10 @@ function App() {
       //   {/* <Item>Item 2</Item>
       //   <Item>Item 3</Item> */}
       // </Stack>
-      <Button variant="contained" onClick={() => handleStage()} size="large">Next</Button>
+      <div>
+        <Home></Home>
+        <Button variant="contained" onClick={() => handleStage()} size="large">Next</Button>
+      </div>
     );
   }
   else if (stage === "gamemode") {
@@ -201,7 +219,7 @@ function App() {
   }
   else if (stage === "plan") {
     return (
-      <Container maxWidth="xl" className="background">
+      <Container maxWidth="lg" className="background">
         <Box
           maxWidth="xl"
           display="flex"
@@ -213,11 +231,12 @@ function App() {
             container
             spacing={2}
             alignItems="stretch"
+            justifyContent="center"
           >
             {plans.map(item => (
               <Grid
                 item xs={3}
-                style={{ display: 'flex' }}
+                style={{ display: 'flex', justifyContent: 'space-evenly' }}
               >
                 <Card
                   id={item.id}
@@ -233,10 +252,10 @@ function App() {
                   <CardActionArea>
                     <CardContent>
                       <Typography gutterBottom variant="h4" component="div" color="common.white">
-                        {item.header}
+                        {item.name}
                       </Typography>
-                      <Typography variant="body1" color="#ADADAD">
-                        {item.desc}
+                      <Typography variant="body1" color="#ADADAD" style={ {alignItems: 'flex-end'} }>
+                        Policy Premium: {item.policyPremium}<br></br>Deductible: {item.deductible}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
@@ -279,7 +298,7 @@ function App() {
             }}
           >
             <CardContent>
-              <Typography gutterBottom variant="h2" component="div" color="common.white" display="flex" justifyContent="center">
+            <Typography gutterBottom variant="h2" component="div" color="common.white" display="flex" justifyContent="center">
                 {scenarios[0].header}
               </Typography>
               <Typography variant="h5" color="#ADADAD">
@@ -304,7 +323,17 @@ function App() {
   }
   else if (stage === "end") {
     return (
-      <Button variant="contained" onClick={() => startOver()} size="large">Start Over</Button>
+      <Container maxWidth="xl" className="background">
+       <Box
+          maxWidth="xl"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          minHeight="75vh"
+        >
+        <Button variant="contained" onClick={() => startOver()} size="large">Start Over</Button>
+        </Box>
+      </Container>
       // <Container maxWidth="xl" className="background">
       //   <Box
       //     maxWidth="xl"
