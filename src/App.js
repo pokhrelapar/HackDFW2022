@@ -8,6 +8,7 @@ import { Box, Button, Card, CardActionArea, CardContent, Chip, Container, Grid, 
 function App() {
   const locations = useLocationStore(state => state.locations);
   const scenarios = useScenarioStore(state => state.scenarios);
+  const getLocations = useLocationStore(state => state.getLocations);
   const plans = usePlanStore(state => state.plans);
   const [selected, setSelected] = useState();
   const [stage, setStage] = useState("splash");
@@ -24,6 +25,7 @@ function App() {
     else if (stage === "gamemode") {
       setStage("location");
       setSelected(undefined);
+      getLocations();
     }
     else if (stage === "location") {
       setStage("plan");
