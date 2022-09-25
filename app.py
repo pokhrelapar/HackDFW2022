@@ -11,7 +11,7 @@ introAndAbout = {
                     " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
                     "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
                     "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
-                    "Good luck!"
+                "Good luck!"
 }
 
 essentialPremiumsDallas = {
@@ -265,7 +265,7 @@ def getLocations():
     else:
         return json.dumps(error404)
 
-@app.route("/plans", methods=['GET'])
+@app.route("/plans/<location>", methods=['GET'])
 def plans(location):
     if request.method == 'GET':
         if location == "Dallas":
@@ -312,18 +312,6 @@ def results(location, plan):
 
 if __name__ == "__main__":
     app.run()
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
