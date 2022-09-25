@@ -7,7 +7,16 @@ app = Flask(__name__)
 
 #list of locations
 locations = [
-    "Dallas", "San Francisco", "Patterson", "Wichita"
+    {"Dallas": "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley', therefore "
+               "prone to windstorms."}, 
+    {"San Francisco": "One of the most populat tourist cities to visit in California, lots of good food and attractions to see, "
+                      "however near a fault line, therefore prone to earthquakes."},
+    {"Patterson": "A relatively unpopulated city, totaling at only 750 people, but known for being near the heart of Atlanta, "
+                  "lots of tourist attractions, but frequent flooding "
+                  "due to Georgia's proximity to the coast."},
+    {"Wichita": "Known as the 'Air Capital of the World', Wichita is known for being the birthplace of the popular fast food pizza. "
+                "However, Landslides are one of the most common natural disasters that occur in Kansas, being that it's in the heart "
+                "of tornado valley."}
 ]
 
 
@@ -18,13 +27,6 @@ introAndAbout = {
               "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
               "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
               "Good luck!"
-}
-
-locationDescription = {
-    'Dallas': "",
-    'San Francisco': "",
-    'Patterson': "",
-    'Wichita': ""
 }
 
 #Dictionaries to send back to front-end
@@ -251,27 +253,17 @@ def explain():
         return json.dumps(error404)
 
 
-@app.route("/locations", methods=['GET'])
-def locationsList():
-    if request.method == 'GET':
-        return json.dumps(locations)
-    else:
-        return json.dumps(error404)
-
-
-@app.route("/locDescription", methods=['GET'])
-def locDescription():
-    if request.method == 'GET':
-        return json.dumps(locationDescription)
-    else:
-        return json.dumps(error404)
-
-
 dallasPlans = [essentialPremiumsDallas, essentialPremiumsAndWindstormDallas, premiumPremiumsDallas, premiumPremiumsAndWindstormDallas]
 sanFranPlans = [essentialPremiumsSanFran, essentialPremiumsAndEarthquakeSanFran, premiumPremiumsSanFran, premiumPremiumsAndEarthquakeSanFran]
 pattersonPlans = [essentialPremiumsPatterson, essentialPremiumsAndFloodPatterson, premiumPremiumsPatterson, premiumPremiumsAndFloodPatterson]
 wichitaPlans = [essentialPremiumsWichita, essentialPremiumsAndLandslideWichita, premiumPremiumsWichita, premiumPremiumsAndLandslideWichita]
 
+@app.route("/location", methods=['GET'])
+def getLocation():
+    if request.method == 'GET':
+        return json.dumps(locations)
+    else:
+        return json.dumps(error404)
 
 @app.route("/plans/<location>", methods=['GET'])
 def plans(location):
@@ -293,7 +285,7 @@ def results(location, plan):
     currPlan = plan
     currLocation = location
     if request.method == 'GET':
-        numChose = np.random.choice(np.arrange(1, 6), p=probability(currLocation))
+        numChose = np.random.choice(np.arange(1, 6), p=probability(currLocation))
         if numChose == 1:
             return json.dumps(safe)
         if numChose == 2:
