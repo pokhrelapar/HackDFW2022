@@ -1,0 +1,6 @@
+@app.route("/location", methods=['GET'])
+def getLocation():
+    if request.method == 'GET':
+        return json.dumps(locations)
+    else:
+        return json.dumps(error404)
