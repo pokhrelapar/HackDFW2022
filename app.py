@@ -2,42 +2,100 @@ import json
 from flask import Flask, request
 import numpy as np
 
-#routing API endpoints
+#creating the app endpoint
 app = Flask(__name__)
-
-#list of locations
-locations = [
-    {"Dallas": "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley'"}, 
-    {"San Francisco": "One of the most populat tourist cities to visit in California, lots of good food and attractions to see, "
-                      "however near a fault line, therefore prone to earthquakes"},
-    {}
-]
-
-#list of plans
-plansDallas = [
-
-]
-    
-
-plansSanFrancisco = [
-
-]
-
-plansPatterson = [
-
-]
-
-plansWichita = [
-
-]
 
 #Dictionaries to send back to front-end
 introAndAbout = {
     'Introduction': "Hi, welcome to [insert name here]. The goal of this game is to create an insurance plan and avoid the obstacles throughout the game. There" 
-              " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
-              "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
-              "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
-              "Good luck!"
+                    " will be obstacles throughout the course of the game and the goal is to get the best net balance from "
+                    "the game possible. There will be 10 years to go through the game and each year may have an obstacle "
+                    "that might hinder you. Try your best to get through the game with the least amount of money to pay! "
+                    "Good luck!"
+}
+
+essentialPremiumsDallas = {
+    'Name': "Essential Premiums Plan",
+    'Policy Premium': 3621,
+    'Deductible': 6880
+}
+essentialPremiumsAndWindstormDallas = {
+    'Name': "Essential Premiums and Windstorm Coverage Plan",
+    'Policy Premium': 5321,
+    'Deductible': 6880
+}
+premiumPremiumsDallas = {
+    'Name': "Premium Premiums",
+    'Policy Premium': 4802,
+    'Deductible': 3440
+}
+premiumPremiumsAndWindstormDallas = {
+    'Name': "Premium Premiums and Windstorm Coverage Plan",
+    'Policy Premium': 6502,
+    'Deductible': 3440
+}
+
+essentialPremiumsSanFran = {
+    'Name': "Essential Premiums Plan",
+    'Policy Premium': 1119,
+    'Deductible': 8580
+}
+essentialPremiumsAndEarthquakeSanFran = {
+    'Name': "Essential Premiums and Earthquake Coverage Plan",
+    'Policy Premium': 3619,
+    'Deductible': 8580
+}
+premiumPremiumsSanFran = {
+    'Name': "Premium Premiums Plan",
+    'Policy Premium': 1474,
+    'Deductible': 2145
+}
+premiumPremiumsAndEarthquakeSanFran = {
+    'Name': "Premium Premiums and Earthquake Coverage Plan",
+    'Policy Premium': 3974,
+    'Deductible': 2145
+}
+
+essentialPremiumsPatterson = {
+    'Name': "Essential Premiums Plan",
+    'Policy Premium': 1522,
+    'Deductible': 3220
+}
+essentialPremiumsAndFloodPatterson = {
+    'Name': "Essential Premiums and Flood Coverage Plan",
+    'Policy Premium': 2222,
+    'Deductible': 3220
+}
+premiumPremiumsPatterson = {
+    'Name': "Premium Premiums Plan",
+    'Policy Premium': 2218,
+    'Deductible': 1000
+}
+premiumPremiumsAndFloodPatterson = {
+    'Name': "Premium Premiums and Flood Coverage Plan",
+    'Policy Premium': 2918,
+    'Deductible': 1000
+}
+
+essentialPremiumsWichita = {
+    'Name': "Essential Premiums Plan",
+    'Policy Premium': 3621,
+    'Deductible': 10520
+}
+essentialPremiumsAndLandslideWichita = {
+    'Name': "Essential Premiums and Landslide Coverage Plan",
+    'Policy Premium': 4871,
+    'Deductible': 10520
+}
+premiumPremiumsWichita = {
+    'Name': "Premium Premiums Plan",
+    'Policy Premium': 4933,
+    'Deductible': 2630
+}
+premiumPremiumsAndLandslideWichita = {
+    'Name': "Premium Premiums and Landslide Coverage Plan",
+    'Policy Premium': 6183,
+    'Deductible': 2630
 }
 
 insuranceEarthquake = {
@@ -114,6 +172,36 @@ error404 = {
     '404': "Error 404, page not found."
 }
 
+#list of locations
+locations = [
+    {"Dallas": "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley', therefore "
+               "prone to windstorms."}, 
+    {"San Francisco": "One of the most populat tourist cities to visit in California, lots of good food and attractions to see, "
+                      "however near a fault line, therefore prone to earthquakes."},
+    {"Patterson": "A relatively unpopulated city, totaling at only 750 people, but known for being near the heart of Atlanta, "
+                  "lots of tourist attractions, but frequent flooding "
+                  "due to Georgia's proximity to the coast."},
+    {"Wichita": "Known as the 'Air Capital of the World', Wichita is known for being the birthplace of the popular fast food pizza. "
+                "However, Landslides are one of the most common natural disasters that occur in Kansas, being that it's in the heart "
+                "of tornado valley."}
+]
+
+dallasPlans = [
+    essentialPremiumsDallas, essentialPremiumsAndWindstormDallas, premiumPremiumsDallas, premiumPremiumsAndWindstormDallas
+]
+
+sanFranPlans = [
+    essentialPremiumsSanFran, essentialPremiumsAndEarthquakeSanFran, premiumPremiumsSanFran, premiumPremiumsAndEarthquakeSanFran
+]
+
+pattersonPlans = [
+    essentialPremiumsPatterson, essentialPremiumsAndFloodPatterson, premiumPremiumsPatterson, premiumPremiumsAndFloodPatterson
+]
+
+wichitaPlans = [
+    essentialPremiumsWichita, essentialPremiumsAndLandslideWichita, premiumPremiumsWichita, premiumPremiumsAndLandslideWichita
+]
+
 #determine probabilities in a list
 probEarthquake = 0.0
 probFlood = 0.0
@@ -178,8 +266,18 @@ def getLocations():
         return json.dumps(error404)
 
 @app.route("/plans", methods=['GET'])
-def plans():
-    return #insert json.dumps, check for error404
+def plans(location):
+    if request.method == 'GET':
+        if location == "Dallas":
+            return json.dumps(dallasPlans)
+        if location == "San Francisco":
+            return json.dumps(sanFranPlans)
+        if location == "Patterson":
+            return json.dumps(pattersonPlans)
+        if location == "Wichita":
+            return json.dumps(wichitaPlans)
+    else:
+        return json.dumps(error404)
 
 @app.route("/results/<location>/<plan>", methods=['GET'])
 def results(location, plan):
@@ -214,6 +312,12 @@ def results(location, plan):
 
 if __name__ == "__main__":
     app.run()
+
+
+
+
+
+
 
 
 
