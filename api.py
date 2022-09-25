@@ -9,16 +9,18 @@ CORS(app, resources={r"/*": {"origins": "*"}})
 
 #list of locations
 locations = [
-    {"Dallas": "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley', therefore "
-               "prone to windstorms."}, 
-    {"San Francisco": "One of the most populat tourist cities to visit in California, lots of good food and attractions to see, "
-                      "however near a fault line, therefore prone to earthquakes."},
-    {"Patterson": "A relatively unpopulated city, totaling at only 750 people, but known for being near the heart of Atlanta, "
-                  "lots of tourist attractions, but frequent flooding "
-                  "due to Georgia's proximity to the coast."},
-    {"Wichita": "Known as the 'Air Capital of the World', Wichita is known for being the birthplace of the popular fast food pizza. "
-                "However, Landslides are one of the most common natural disasters that occur in Kansas, being that it's in the heart "
-                "of tornado valley."}
+    {"id": 'Dallas', 'name': 'Dallas, TX', 'desc': "A well-rounded city with lots of attractions, weather is fairly consistent but is in 'tornado alley', therefore "
+                                                   "prone to windstorms."
+    }, 
+    {"id": "San Francisco", "name": "San Francisco, CA", "desc": "One of the most populat tourist cities to visit in California, "
+                                                                    "lots of good food and attractions to see, "
+                                                                    "however near a fault line, therefore prone to earthquakes."},
+    {"id": "Patterson", "name": "Patterson, GA", "desc": "A relatively unpopulated city, totaling at only 750 people, but known for being "
+                                                         "near the heart of Atlanta, lots of tourist attractions, but frequent flooding "
+                                                         "due to Georgia's proximity to the coast."},
+    {"id": "Wichita", "name": "Wichita, KA", "desc": "Known as the 'Air Capital of the World', Wichita is known for being the birthplace "
+                                                     "of the popular fast food pizza. However, Landslides are one of the most common "
+                                                     "natural disasters that occur in Kansas, being that it's in the heart of tornado valley."}
 ]
 
 #Dictionaries to send back to front-end
