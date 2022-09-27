@@ -3,6 +3,8 @@ We all enjoy choose-your-own adventures games and thought it would be a great wa
 
 ## What it does
 The game simulates 10 years with State Farm as your home insurance provider. You will experience hardship, triumph, and everything in between. 
+![jake](https://user-images.githubusercontent.com/37117865/192424707-567beb92-d2b1-4b8b-8c55-cd2e4967b106.png)
+
 
 ## How we built it
 We used React and CSS Bootstrap to build the dynamically loaded front end of the game, Flask and Axios to form API calls to our backend which was built with Python.
